@@ -1,6 +1,4 @@
-Submission for Sheet 5
-----------------------
-
+# Submission for Sheet 5
 Author: Fabian Ungewiß,  
 Mtr-Nr.: 4290735
 
