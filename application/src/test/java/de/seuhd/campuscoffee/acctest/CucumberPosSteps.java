@@ -93,6 +93,12 @@ public class CucumberPosSteps {
 
     // TODO: Add Given step for new scenario
 
+    @Given("the POS list contains the following elements")
+    public void thePosListContainsTheFollowingElements(List<PosDto> posList) {
+        createdPosList = createPos(posList);
+        assertThat(createdPosList).usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt", "updatedAt").isEqualTo(posList);
+    }
+
     // When -----------------------------------------------------------------------
 
     @When("I insert POS with the following elements")
@@ -102,6 +108,24 @@ public class CucumberPosSteps {
     }
 
     // TODO: Add When step for new scenario
+
+    @When("I update the POS named {string} with the new description {string}")
+    public void iUpdateThePosNamedWithTheNewDescription(String name, String newDescription) {
+        PosDto posToUpdate = retrievePosByName(name);
+        PosDto updatedPosDto = PosDto.builder()
+                .id(posToUpdate.id())
+                .name(posToUpdate.name())
+                .description(newDescription)
+                .type(posToUpdate.type())
+                .campus(posToUpdate.campus())
+                .street(posToUpdate.street())
+                .houseNumber(posToUpdate.houseNumber())
+                .postalCode(posToUpdate.postalCode())
+                .city(posToUpdate.city())
+                .build();
+        List<PosDto> updatedPosList = updatePos(List.of(updatedPosDto));
+        updatedPos = updatedPosList.get(0);
+    }
 
     // Then -----------------------------------------------------------------------
 
@@ -114,4 +138,10 @@ public class CucumberPosSteps {
     }
 
     // TODO: Add Then step for new scenario
+
+    @Then("the POS named {string} should have the description {string}")
+    public void thePosNamedShouldHaveTheDescription(String name, String expectedDescription) {
+        PosDto retrievedPos = retrievePosByName(name);
+        assertThat(retrievedPos.description()).isEqualTo(expectedDescription);
+    }
 }
